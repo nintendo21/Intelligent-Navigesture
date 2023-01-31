@@ -3,6 +3,8 @@ import numpy as np
 import Handtrackingmodule as htm
 import time
 import pyautogui
+import mediapipe
+import webbrowser
 
 
 wCam, hCam = 640, 480
@@ -17,7 +19,7 @@ cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
 
-detector = htm.handDetector(maxHands=1)
+detector = htm.handDetector(maxHands=1,detectionCon=0.7)
 
 wScr, hScr = pyautogui.size()
 
@@ -54,7 +56,7 @@ while True:
         if fingers[1]==1 and fingers[2] == 1 and fingers[3]==0 :
             length, img, lineInfo = detector.findDistance(8, 12, img)
             print(length)
-            if length < 40:
+            if length < 55:
                 cv2.circle(img, (lineInfo[4], lineInfo[5]),
                            15, (0, 255, 0), cv2.FILLED)
                 pyautogui.click()
@@ -63,19 +65,25 @@ while True:
         if fingers[1]==0 and fingers[2] == 1 and fingers[3]==1  :
             length, img, lineInfo = detector.findDistance(12, 16, img)
             print(length)
-            if length < 40:
+            if length < 55:
                 cv2.circle(img, (lineInfo[4], lineInfo[5]),
                            15, (0, 255, 0), cv2.FILLED)
                 pyautogui.click(button= "right" )
 
-          # MIDDLE CLICK
-        if fingers[1]==1 and fingers[2] == 1 and fingers[3]==1  :
-            length, img, lineInfo = detector.findDistance(12, 16, img)
-            print(length)
-            if length < 40:
-                cv2.circle(img, (lineInfo[4], lineInfo[5]),
-                           15, (0, 255, 0), cv2.FILLED)
-                pyautogui.click(button= "middle" )
+          # SCROLL
+        if fingers[0]==1 and fingers[1] == 0 and fingers[2]==0 and fingers[3]==0 and fingers[4]==0 :
+            pyautogui.scroll(-50)
+        if fingers[0]==1 and fingers[1] == 1 and fingers[2]==1 and fingers[3]==1 and fingers[4]==1 :
+            pyautogui.scroll(50) 
+        
+         
+
+
+          #webbrowser module 
+        if fingers[0]==1 and fingers[1] == 1 and fingers[2]==1 and fingers[3]==1 and fingers[4]==0 :
+            webbrowser.open('https://www.google.com')
+            time.sleep(0.5)
+        
         
         
         cTime = time.time()
